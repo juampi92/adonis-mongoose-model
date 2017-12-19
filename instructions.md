@@ -17,7 +17,7 @@ const aliases = {
 ```
 ## Config mongodb connection
 
-Make sure to add the database config inside `config/database.js` file.
+Finally add the database config inside `config/database.js` file.
 
 ```js
   /*
@@ -45,9 +45,9 @@ And then your `.env` file
   DB_CONNECTION=mongodb
   MONGO_HOST=127.0.0.1
   MONGO_PORT=27017
-  MONGO_USER=
-  MONGO_PASSWORD=
-  MONGO_DATABASE=prap
+  MONGO_USER=user
+  MONGO_PASSWORD=pwsecret123
+  MONGO_DATABASE=adonis
 ```
 
 That's all 🎉
@@ -75,6 +75,14 @@ There's an example of a mongoose Token Model below, that will match with the ser
 
 ## Creating Models
 
+You can initiate a model using adonis cli,
+
+```bash
+adonis make:mongoose Foo
+```
+
+And that will make the following
+
 ```js
 'use strict'
 
@@ -83,23 +91,23 @@ const { Schema } = mongoose
 const Model = use('Model') // Basic Mongoose Model
 
 /**
- * User's db Schema
+ * Foo's db Schema
  */
-const UserSchema = new Schema({
-  name: String
+const FooSchema = new Schema({
+  
 })
 
 /**
- * User's instance and static methods
+ * Foo's instance and static methods
  * @class
  */
-class User extends Model {
-
+class Foo extends Model {
+  
 }
 
-UserSchema.loadClass(User)
+FooSchema.loadClass(Foo)
 
-module.exports = mongoose.model('User', UserSchema)
+module.exports = mongoose.model('Foo', FooSchema)
 
 ```
 

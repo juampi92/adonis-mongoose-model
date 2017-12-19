@@ -1,10 +1,16 @@
 'use strict'
 
+/*
+ * adonis-mongoose
+ *
+ * (c) Juan Pablo Barreto <juampi92@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+*/
+
 const { ioc, ServiceProvider }  = require('@adonisjs/fold')
 const Mongoose = require('mongoose')
-
-const MongooseSerializer = require('../src/Serializers/MongooseSerializer')
-
 
 class MongooseProvider extends ServiceProvider {
 
@@ -12,9 +18,10 @@ class MongooseProvider extends ServiceProvider {
    * Install mongoose serializer
    */
   _registerSerializer() {
-    ioc.extend('Adonis/Src/Auth', 'mongoose', function (app) {
-      return MongooseSerializer
-    }, 'serializer')
+    ioc.extend('Adonis/Src/Auth',
+      'mongoose',
+      (app) => require('../src/Serializers/MongooseSerializer'),
+      'serializer')
   }
 
   async _registerMongoose() {
@@ -38,10 +45,46 @@ class MongooseProvider extends ServiceProvider {
     this.app.alias('Adonis/Src/Model', 'Model')
   }
 
+    /**
+   * Register the `make:Mongoose` command to the IoC container
+   *
+   * @method _registerCommands
+   *
+   * @return {void}
+   *
+   * @private
+   */
+  _registerCommands () {
+    this.app.bind('Adonis/Commands/Make:Mongoose', () => require('../commands/MakeModel'))
+  }
+
+  /**
+   * Register bindings
+   *
+   * @method register
+   *
+   * @return {void}
+   */
   async register () {
     this._registerSerializer()
     this._registerModel()
+    this._registerCommands()
     await this._registerMongoose()
+  }
+
+  /**
+   * On boot
+   *
+   * @method boot
+   *
+   * @return {void}
+   */
+  boot () {
+    /**
+     * Register command with ace.
+     */
+    const ace = require('@adonisjs/ace')
+    ace.addCommand('Adonis/Commands/Make:Mongoose')
   }
 
 }
