@@ -129,7 +129,7 @@ class AppSerializer {
     debug('finding user for %s token', token)
     if (!token) return null
 
-    const tokenResponse = await this._Token.fetchSession(token)
+    const tokenResponse = await this._Token.fetchSession(token, type)
     const { uid } = tokenResponse
     return uid
   }
@@ -149,7 +149,7 @@ class AppSerializer {
    */
   async saveToken (user, token, type) {
     let accessToken = new this._Token({
-      token, uid: user._id
+      token, uid: user._id, type
     })
     debug('saving token for %s user', user._id)
     await accessToken.save()
@@ -201,9 +201,9 @@ class AppSerializer {
    *
    * @return {Object}
    */
-  async listTokens (user, type = null) {
+  async listTokens (user, type) {
     return await this._Token.find({
-      uid: user.primaryKeyValue
+      uid: user.primaryKeyValue, type
     }).exec()
   }
 
