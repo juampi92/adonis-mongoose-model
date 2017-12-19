@@ -15,12 +15,12 @@ const aliases = {
   Mongoose: 'Adonis/Addons/Mongoose'
 }
 ```
-# Config mongodb connection
+## Config mongodb connection
 
 Make sure to add the database config inside `config/database.js` file.
 
 ```js
-    /*
+  /*
   |--------------------------------------------------------------------------
   | MongoDB
   |--------------------------------------------------------------------------
@@ -30,19 +30,30 @@ Make sure to add the database config inside `config/database.js` file.
   */
   mongodb: {
     connection: {
-      host: Env.get('DB_HOST', 'localhost'),
-      port: Env.get('DB_PORT', 27017),
-      username: Env.get('DB_USER', 'admin'),
-      password: Env.get('DB_PASSWORD', ''),
-      database: Env.get('DB_DATABASE', 'adonis'),
+      host: Env.get('MONGO_HOST', 'localhost'),
+      port: Env.get('MONGO_PORT', 27017),
+      username: Env.get('MONGO_USER', 'admin'),
+      password: Env.get('MONGO_PASSWORD', ''),
+      database: Env.get('MONGO_DATABASE', 'adonis'),
     }
   },
+```
+
+And then your `.env` file
+
+```bash
+  DB_CONNECTION=mongodb
+  MONGO_HOST=127.0.0.1
+  MONGO_PORT=27017
+  MONGO_USER=
+  MONGO_PASSWORD=
+  MONGO_DATABASE=prap
 ```
 
 That's all 🎉
 
 
-# Configuring Auth serializer
+## Configuring Auth serializer
 
 Edit the `config/auth.js` file for including the serializer. For example on the api schema
 
@@ -103,7 +114,6 @@ This is an example of a Token Model compatible with the Mongoose Serializer
   const { Schema } = mongoose
   const Model = use('Model')
 
-  const { randomString } = require('../core/utils')
   const moment = use('moment')
 
   /**

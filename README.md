@@ -1,4 +1,4 @@
-# Adonis-Mongoose 🔒
+# Adonis-Mongoose
 > Fully Mongoose-Model integration, with mongodb connection
 
 This package brings you a MongooseProvider that connects to the database, a Mongoose base Model, a mongoose serializer for AdonisAuth
