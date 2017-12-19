@@ -12,6 +12,7 @@ const debug = require('debug')('adonis:auth')
  */
 class AppSerializer {
   constructor () {
+    this.Hash = Hash
     this._config = null
   }
 
@@ -24,7 +25,7 @@ class AppSerializer {
    * @return {Array}
    */
   static get inject () {
-    return []
+    return ['Adonis/Src/Hash']
   }
 
   /**
@@ -111,8 +112,11 @@ class AppSerializer {
    * @return {Boolean}
    */
   async validateCredentails (user, password) {
-    // TODO for generic implementation
-    return false
+    const pw = user[this._config.password]
+    if (!user || !pw) {
+      return false
+    }
+    return this.Hash.verify(password, pw)
   }
 
   /**

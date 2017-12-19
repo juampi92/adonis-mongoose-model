@@ -15,23 +15,6 @@ const aliases = {
   Mongoose: 'Adonis/Addons/Mongoose'
 }
 ```
-# Config Auth serializer
-
-Edit the `config/auth.js` file for including the serializer. For example on the api schema
-
-```js
-  api: {
-    serializer: 'mongoose',
-    scheme: 'api',
-    model: 'App/Models/User',
-    token: 'App/Models/Token',
-    expiry: '5d'
-  },
-```
-
-There's an example of a mongoose Token Model below, that will match with the serializer perfectly.
-(this needs more work)
-
 # Config mongodb connection
 
 Make sure to add the database config inside `config/database.js` file.
@@ -57,6 +40,27 @@ Make sure to add the database config inside `config/database.js` file.
 ```
 
 That's all 🎉
+
+
+# Configuring Auth serializer
+
+Edit the `config/auth.js` file for including the serializer. For example on the api schema
+
+```js
+  api: {
+    serializer: 'mongoose',
+    scheme: 'api',
+    model: 'App/Models/User',
+    token: 'App/Models/Token',
+    uid: 'username', // The user identifier. Ej: email, username
+    password: '', // Password field if using user-password validation
+    expiry: '30d', // Not yet implemented
+  },
+```
+
+There's an example of a mongoose Token Model below, that will match with the serializer perfectly.
+(this needs more work)
+
 
 ## Creating Models
 
