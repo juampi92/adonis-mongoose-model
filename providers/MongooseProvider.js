@@ -1,7 +1,7 @@
 'use strict'
 
 /*
- * adonis-mongoose
+ * adonis-mongoose-model
  *
  * (c) Juan Pablo Barreto <juampi92@gmail.com>
  *

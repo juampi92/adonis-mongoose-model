@@ -4,13 +4,13 @@ const { ioc } = require('@adonisjs/fold')
 const debug = require('debug')('adonis:auth')
 
 /**
- * Lucid serializers uses lucid model to validate
+ * Mongoose serializers uses mogoose model to validate
  * and fetch user details.
  *
- * @class AppSerializer
+ * @class MongooseSerializer
  * @constructor
  */
-class AppSerializer {
+class MongooseSerializer {
   constructor (Hash) {
     this.Hash = Hash
     this._config = null
@@ -53,7 +53,7 @@ class AppSerializer {
    * @return {String}
    */
   get primaryKey () {
-    return this._Model.primaryKey
+    return this._Model.primaryKey || this._Model.primaryKey()
   }
 
   /**
@@ -227,4 +227,4 @@ class AppSerializer {
   }
 }
 
-module.exports = AppSerializer
+module.exports = MongooseSerializer
