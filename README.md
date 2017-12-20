@@ -1,4 +1,4 @@
-# Adonis-Mongoose
+# Adonis-Mongoose-Model
 > Fully Mongoose-Model integration, with mongodb connection
 
 This package brings you a MongooseProvider that connects to the database, a Mongoose base Model, a mongoose serializer for AdonisAuth
@@ -9,11 +9,12 @@ This package brings you a MongooseProvider that connects to the database, a Mong
 
 1. Support for Mongoose model creation.
 2. Support for a Mongoose serializer.
+3. Adonis command for creating mongoose models
 
 ## Installation
 You can install the package from npm.
 ```bash
-adonis install adonis-mongoose-model
+adonis install adonis-mongoose-model --yarn
 ```
 
 Make sure to read [instructions.md](instructions.md) file.
