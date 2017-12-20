@@ -13,7 +13,7 @@ This package brings you a MongooseProvider that connects to the database, a Mong
 ## Installation
 You can install the package from npm.
 ```bash
-adonis install juampi92/adonis-mongoose
+adonis install adonis-mongoose-model
 ```
 
 Make sure to read [instructions.md](instructions.md) file.
