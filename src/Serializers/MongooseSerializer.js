@@ -11,7 +11,7 @@ const debug = require('debug')('adonis:auth')
  * @constructor
  */
 class AppSerializer {
-  constructor () {
+  constructor (Hash) {
     this.Hash = Hash
     this._config = null
   }
@@ -134,6 +134,9 @@ class AppSerializer {
     if (!token) return null
 
     const tokenResponse = await this._Token.fetchSession(token, type)
+
+    if (!tokenResponse) return null
+
     const { uid } = tokenResponse
     return uid
   }

@@ -52,7 +52,6 @@ And then your `.env` file
 
 That's all 🎉
 
-
 ## Configuring Auth serializer
 
 Edit the `config/auth.js` file for including the serializer. For example on the api schema
@@ -71,6 +70,12 @@ Edit the `config/auth.js` file for including the serializer. For example on the 
 
 There's an example of a mongoose Token Model below, that will match with the serializer perfectly.
 (this needs more work)
+
+Also, when defining your User Model, you'll have to add this static property to your schema, in order for the Auth Schemas to work. (They'll access the static property 'primaryKey' of the model)
+
+```js
+UserSchema.statics.primaryKey = '_id'
+```
 
 
 ## Creating Models
