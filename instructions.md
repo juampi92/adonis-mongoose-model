@@ -35,6 +35,9 @@ Finally add the database config inside `config/database.js` file.
       username: Env.get('MONGO_USER', 'admin'),
       password: Env.get('MONGO_PASSWORD', ''),
       database: Env.get('MONGO_DATABASE', 'adonis'),
+      options: {
+        // All options can be found at http://mongoosejs.com/docs/connections.html
+      }
     }
   },
 ```
@@ -153,7 +156,7 @@ This is an example of a Token Model compatible with the Mongoose Serializer
      * @memberof Token
      */
     static async fetchSession(token, type) {
-      return await this.findOneAndUpdate({
+      return this.findOneAndUpdate({
         token,
         type,
         expires: {

@@ -27,13 +27,14 @@ class MongooseProvider extends ServiceProvider {
   async _registerMongoose() {
     this.app.singleton('Adonis/Addons/Mongoose', function (app) {
       const Config = app.use('Adonis/Src/Config')
-      const { host, port, database, user, pass } = Config.get('database.mongodb.connection')
+      const { host, port, database, user, pass, options } = Config.get('database.mongodb.connection')
 
       const connectUri = `mongodb://${host}:${port}/${database}`
       const connectionString = (user || pass) ? `${user}:${pass}@${connectUri}` : connectUri
       Mongoose.Promise = global.Promise
       Mongoose.connect(connectionString, {
-        useMongoClient: true
+        useMongoClient: true,
+        ...options
       })
 
       return Mongoose
