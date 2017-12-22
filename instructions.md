@@ -156,7 +156,7 @@ This is an example of a Token Model compatible with the Mongoose Serializer
      * @param {String} type
      * @memberof Token
      */
-    static async fetchSession(token, type) {
+    static async fetchSession (token, type) {
       return this.findOneAndUpdate({
         token,
         type,
@@ -176,7 +176,7 @@ This is an example of a Token Model compatible with the Mongoose Serializer
      * @returns
      * @memberof Token
      */
-    static async dispose(uid, tokens = null, inverse = false) {
+    static async dispose (uid, tokens = null, inverse = false) {
       // Remove some tokens
       if (tokens) {
         // Remove all but selected, or just selected
@@ -194,7 +194,7 @@ This is an example of a Token Model compatible with the Mongoose Serializer
   }
 
   TokenSchema.loadClass(Token)
-  TokenSchema.index({ token: 1 });
+  TokenSchema.index({ token: 1 })
 
   module.exports = mongoose.model('Token', TokenSchema)
 ```

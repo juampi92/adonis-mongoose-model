@@ -17,14 +17,14 @@ class MongooseProvider extends ServiceProvider {
   /**
    * Install mongoose serializer
    */
-  _registerSerializer() {
+  _registerSerializer () {
     ioc.extend('Adonis/Src/Auth',
       'mongoose',
       (app) => require('../src/Serializers/MongooseSerializer'),
       'serializer')
   }
 
-  async _registerMongoose() {
+  async _registerMongoose () {
     this.app.singleton('Adonis/Addons/Mongoose', function (app) {
       const Config = app.use('Adonis/Src/Config')
       let connectionString = Config.get('database.mongodb.connectionString', null)
@@ -53,7 +53,7 @@ class MongooseProvider extends ServiceProvider {
     })
   }
 
-  _registerModel() {
+  _registerModel () {
     this.app.bind('Adonis/Src/Model', (app) => require('../src/Model/Base'))
     this.app.alias('Adonis/Src/Model', 'Model')
   }

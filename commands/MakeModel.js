@@ -84,7 +84,7 @@ class MakeMongoose extends Command {
     /**
      * Split and pop to get the actual model name, only needs
      * to be full for pathing
-     * 
+     *
      * eg: adonis make:mongoose Directory/Model
      */
     name = name.split('/').pop()
