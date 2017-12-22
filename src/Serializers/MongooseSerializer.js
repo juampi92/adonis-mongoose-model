@@ -138,7 +138,7 @@ class MongooseSerializer {
     if (!tokenResponse) return null
 
     const { uid } = tokenResponse
-    return uid
+    return this.findById(uid)
   }
 
   /**
