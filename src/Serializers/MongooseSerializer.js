@@ -96,7 +96,7 @@ class MongooseSerializer {
    * @return {Model|Null} The model instance or `null`
    */
   async findByUid (uid) {
-    return this.findOne({
+    return this._Model.findOne({
       [this._config.uid || this.primaryKey]: uid
     })
   }
