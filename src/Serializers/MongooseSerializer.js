@@ -53,7 +53,7 @@ class MongooseSerializer {
    * @return {String}
    */
   get primaryKey () {
-    return this._Model.primaryKey || this._Model.primaryKey()
+    return this._Model.getPrimaryKey()
   }
 
   /**
