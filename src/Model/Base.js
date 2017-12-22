@@ -5,11 +5,17 @@ class Base {
     return '_id'
   }
 
+  static getPrimaryKey () {
+    return Base.primaryKey
+  }
+
+  get primaryKey () {
+    return Base.getPrimaryKey()
+  }
+
   get primaryKeyValue () {
-    return this[this.primaryKey()]
+    return this[Base.getPrimaryKey()]
   }
 }
-
-//Base.primaryKey = '_id'
 
 module.exports = Base
