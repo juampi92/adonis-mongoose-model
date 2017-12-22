@@ -32,8 +32,8 @@ Finally add the database config inside `config/database.js` file.
     connection: {
       host: Env.get('MONGO_HOST', 'localhost'),
       port: Env.get('MONGO_PORT', 27017),
-      username: Env.get('MONGO_USER', 'admin'),
-      password: Env.get('MONGO_PASSWORD', ''),
+      user: Env.get('MONGO_USER', 'admin'),
+      pass: Env.get('MONGO_PASSWORD', ''),
       database: Env.get('MONGO_DATABASE', 'adonis'),
       options: {
         // All options can be found at http://mongoosejs.com/docs/connections.html
