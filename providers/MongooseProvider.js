@@ -32,19 +32,20 @@ class MongooseProvider extends ServiceProvider {
         host = 'localhost',
         port = 27017,
         database = 'test',
-        user = '',
-        pass = '',
+        user = null,
+        pass = null,
         options = {}
       } = Config.get('database.mongodb.connection')
 
       if (!connectionString) {
-        const connectUri = `${host}:${port}/${database}`
-        connectionString = (user || pass) ? `${user}:${pass}@${connectUri}` : connectUri
+        connectionString = `mongodb://${host}:${port}/${database}`
       }
 
       Mongoose.Promise = global.Promise
       Mongoose.connect(connectionString, {
         useMongoClient: true,
+        user,
+        pass,
         ...options
       })
 
