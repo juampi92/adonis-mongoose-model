@@ -82,6 +82,14 @@ class MakeMongoose extends Command {
     const validatorPath = path.join(this.Helpers.appRoot(), relativePath)
 
     /**
+     * Split and pop to get the actual model name, only needs
+     * to be full for pathing
+     * 
+     * eg: adonis make:mongoose Directory/Model
+     */
+    name = name.split('/').pop()
+
+    /**
      * If command is not executed via command line, then return
      * the response
      */
