@@ -6,6 +6,12 @@ const BaseModel = use('Model')
  * @class {{ name }}
  */
 class {{ name }} extends BaseModel {
+  static boot () {
+    // Hooks:
+    // this.addHook('preSave', () => {})
+    // Indexes:
+    // this.index({}, {background: true})
+  }
   /**
    * {{ name }}'s schema
    */

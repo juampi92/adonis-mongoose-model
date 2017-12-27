@@ -75,12 +75,6 @@ Edit the `config/auth.js` file for including the serializer. For example on the 
 There's an example of a mongoose Token Model below, that will match with the serializer perfectly.
 (this needs more work)
 
-Also, when defining your User Model, you'll have to add this static property to your schema, in order for the Auth Schemas to work. (They'll access the static property 'primaryKey' of the model)
-
-```js
-UserSchema.statics.primaryKey = '_id'
-```
-
 
 ## Creating Models
 
@@ -95,106 +89,161 @@ And that will make the following
 ```js
 'use strict'
 
-const mongoose = use('Mongoose')
-const { Schema } = mongoose
-const Model = use('Model') // Basic Mongoose Model
+const BaseModel = use('Model')
 
 /**
- * Foo's db Schema
+ * @class {{ name }}
  */
-const FooSchema = new Schema({
-  
-})
+class {{ name }} extends BaseModel {
+  static boot () {
+    // Hooks:
+    // this.addHook('preSave', () => {})
+    // Indexes:
+    // this.index({}, {background: true})
+  }
+  /**
+   * {{ name }}'s schema
+   */
+  static get schema () {
+    return {
 
-/**
- * Foo's instance and static methods
- * @class
- */
-class Foo extends Model {
-  
+    }
+  }
 }
 
-FooSchema.loadClass(Foo)
-
-module.exports = mongoose.model('Foo', FooSchema)
+module.exports = {{ name }}.buildModel('{{ name }}')
 
 ```
+
+## Defining Schema
+
+You define your schema by overwriting the `static get schema ()`.
+
+## Create indexes
+
+Indexes can be created inside the `static boot ()` function (using the same syntax as mongoose's) or outside the class declaration. In that case the index will be deferred until the schema is built when running `buildModel`
+
+## Using hooks
+
+As you might know, Adonis comes with a tool called `hook`, which you can create using `adonis make:hook User`. That'll create a Hook for the User model so you can attach middleware straight to that.
+Now with mongoose-model, you can attach a middleware to a model. [Adonis hook documentation](https://adonisjs.com/docs/4.0/database-hooks) - [Mongoose middleware documentation](http://mongoosejs.com/docs/middleware.html)
+
+Inside the boot function, you can
+
+```js
+static boot () {
+  this.addHook('preSave', 'UserHook.notifyUpdate')
+}
+```
+
+Having in `App/Models/Hooks/UserHook.js`:
+
+```js
+UserHook.notifyUpdate = async (modelInstance) => {
+  // Use await if you'd like to make this async
+  NotificationCenter.push(modelInstance._id, 'save')
+}
+
+```
+
+## Using timestamps
+
+As default, adonis-mongoose-model comes with the created_at and updated_at property, that comes with a middleware that updates the updated_at prop each time you save.
+
+You can ignore those properties by adding a static property on your model:
+
+```js
+static get timestamps () {
+  return false
+}
+```
+
+## Extra: accessing the raw schema
+
+Inside the boot function you can do `this._schema` and access the raw mongoose schema, and add all kinds of custom functionality.
+If you are thingking that this package is mising something, create a PR! They are more than welcome.
 
 # Token model
 
 This is an example of a Token Model compatible with the Mongoose Serializer
 
 ```js
-  'use strict'
+'use strict'
 
-  const mongoose = use('Mongoose')
-  const { Schema } = mongoose
-  const Model = use('Model')
+const Model = use('Model')
 
-  const moment = use('moment')
+const { ObjectId } = use('Mongoose').Schema.Types
+
+const moment = use('moment')
+
+/**
+ * Token's instance and static methods
+ * @class
+ */
+class Token extends Model {
+  static get timestamps () {
+    return false
+  }
 
   /**
-   * Token's db Schema
+   * Define User's schema internally using Model's schema property
    */
-  const TokenSchema = new Schema({
-    uid:          { type: Schema.Types.ObjectId, ref: 'User' },
-    token:        { type: String, required: true },
-    type:         { type: String, required: true },
-    expires:      { type: Date, default: () => moment().add(5, 'days') }
-  })
-
-  /**
-   * Token's instance and static methods
-   * @class
-   */
-  class Token extends Model {
-    /**
-     *
-     *
-     * @static
-     * @param {String} token
-     * @param {String} type
-     * @memberof Token
-     */
-    static async fetchSession (token, type) {
-      return this.findOneAndUpdate({
-        token,
-        type,
-        expires: {
-          $gte: moment()
-        }
-      }, {
-        expires: moment().add(5, 'days')
-      }).populate('uid', '_id name').exec()
-    }
-
-    /**
-     * Remove sessions that match that token
-     *
-     * @static
-     * @param {any} token
-     * @returns
-     * @memberof Token
-     */
-    static async dispose (uid, tokens = null, inverse = false) {
-      // Remove some tokens
-      if (tokens) {
-        // Remove all but selected, or just selected
-        const selector = inverse ? '$nin' : '$in'
-        return this.remove({
-          uid,
-          [selector]: tokens
-        }).exec()
-      }
-      // Remove all tokens
-      return this.remove({
-        uid
-      }).exec()
+  static get schema () {
+    return {
+      uid:          { type: ObjectId, ref: 'User' },
+      token:        { type: String, required: true },
+      type:         { type: String, required: true },
+      expires:      { type: Date, default: () => moment().add(5, 'days') }
     }
   }
 
-  TokenSchema.loadClass(Token)
-  TokenSchema.index({ token: 1 })
+  /**
+   *
+   *
+   * @static
+   * @param {String} token
+   * @param {String} type
+   * @memberof Token
+   */
+  static async fetchSession (token, type) {
+    return this.findOneAndUpdate({
+      token,
+      type,
+      expires: {
+        $gte: moment()
+      }
+    }, {
+      expires: moment().add(5, 'days')
+    })
+    .populate('uid')
+  }
 
-  module.exports = mongoose.model('Token', TokenSchema)
+  /**
+   * Remove sessions that match that token
+   *
+   * @static
+   * @param {any} token
+   * @returns
+   * @memberof Token
+   */
+  static async dispose (uid, tokens = null, inverse = false) {
+    // Remove some tokens
+    if (tokens) {
+      // Remove all but selected, or just selected
+      const selector = inverse ? '$nin' : '$in'
+      return this.remove({
+        uid,
+        [selector]: tokens
+      }).exec()
+    }
+    // Remove all tokens
+    return this.remove({
+      uid
+    }).exec()
+  }
+}
+
+Token.index({ token: 1 })
+
+module.exports = Token.buildModel('Token')
 ```
