@@ -38,7 +38,8 @@ Finally add the database config inside `config/database.js` file.
       database: Env.get('MONGO_DATABASE', 'adonis'),
       options: {
         // All options can be found at http://mongoosejs.com/docs/connections.html
-      }
+      },
+      debug: false
     }
   },
 ```
@@ -92,9 +93,9 @@ And that will make the following
 const BaseModel = use('Model')
 
 /**
- * @class {{ name }}
+ * @class Foo
  */
-class {{ name }} extends BaseModel {
+class Foo extends BaseModel {
   static boot () {
     // Hooks:
     // this.addHook('preSave', () => {})
@@ -102,7 +103,7 @@ class {{ name }} extends BaseModel {
     // this.index({}, {background: true})
   }
   /**
-   * {{ name }}'s schema
+   * Foo's schema
    */
   static get schema () {
     return {
@@ -111,7 +112,7 @@ class {{ name }} extends BaseModel {
   }
 }
 
-module.exports = {{ name }}.buildModel('{{ name }}')
+module.exports = Foo.buildModel('Foo')
 
 ```
 
@@ -143,8 +144,9 @@ UserHook.notifyUpdate = async (modelInstance) => {
   // Use await if you'd like to make this async
   NotificationCenter.push(modelInstance._id, 'save')
 }
-
 ```
+
+The addHook functionality doesn't necesarely needs a hook. You can use a callback (the mongoose's middleware doc), and the name of the hook is composed by [pre | post] [Init | Save | Remove | Validate]. It's important that the command is written in CamelCase.
 
 ## Using timestamps
 
