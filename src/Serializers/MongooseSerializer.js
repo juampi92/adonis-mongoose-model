@@ -53,7 +53,7 @@ class MongooseSerializer {
    * @return {String}
    */
   get primaryKey () {
-    return this._Model.primaryKey || this._Model.primaryKey()
+    return this._Model.primaryKey
   }
 
   /**
@@ -138,7 +138,7 @@ class MongooseSerializer {
     if (!tokenResponse) return null
 
     const { uid } = tokenResponse
-    return uid
+    return uid // this.findById(uid)
   }
 
   /**

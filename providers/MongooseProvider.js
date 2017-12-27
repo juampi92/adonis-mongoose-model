@@ -34,20 +34,25 @@ class MongooseProvider extends ServiceProvider {
         database = 'test',
         user = null,
         pass = null,
-        options = {}
+        options = {},
+        debug = false
       } = Config.get('database.mongodb.connection')
 
+      const auth = user ? `${user}:${pass}@` : ''
+
       if (!connectionString) {
-        connectionString = `mongodb://${host}:${port}/${database}`
+        connectionString = `mongodb://${auth}${host}:${port}/${database}`
       }
 
       Mongoose.Promise = global.Promise
       Mongoose.connect(connectionString, {
         useMongoClient: true,
-        user,
-        pass,
         ...options
       })
+
+      if (debug) {
+        Mongoose.set('debug', true)
+      }
 
       return Mongoose
     })

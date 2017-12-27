@@ -1,24 +1,19 @@
 'use strict'
 
-const mongoose = use('Mongoose')
-const { Schema } = mongoose
-const Model = use('Model')
+const BaseModel = use('Model')
 
 /**
- * {{ name }}'s db Schema
+ * @class {{ name }}
  */
-const {{ name }}Schema = new Schema({
+class {{ name }} extends BaseModel {
+  /**
+   * {{ name }}'s schema
+   */
+  static get schema () {
+    return {
 
-})
-
-/**
- * {{ name }}'s instance and static methods
- * @class
- */
-class {{ name }} extends Model {
-
+    }
+  }
 }
 
-{{ name }}Schema.loadClass({{ name }})
-
-module.exports = mongoose.model('{{ name }}', {{ name }}Schema)
+module.exports = {{ name }}.buildModel('{{ name }}')
