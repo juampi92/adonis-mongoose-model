@@ -6,12 +6,23 @@ const BaseModel = use('Model')
  * @class {{ name }}
  */
 class {{ name }} extends BaseModel {
+  {{#exclude_timestamps}}
+  /**
+   * Exclude created_at and updated_at from the model
+   */
+  static get timestamps () {
+    return false
+  }
+  {{/exclude_timestamps}}
+  {{#include_boot}}
   static boot () {
     // Hooks:
     // this.addHook('preSave', () => {})
+    // this.addHook('preSave', '{{ name }}Hook.method')
     // Indexes:
     // this.index({}, {background: true})
   }
+  {{/include_boot}}
   /**
    * {{ name }}'s schema
    */

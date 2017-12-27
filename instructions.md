@@ -249,3 +249,26 @@ Token.index({ token: 1 })
 
 module.exports = Token.buildModel('Token')
 ```
+
+# Advanced Usage
+
+## new Schema options
+
+If you wanna add the custom schema options when initializing, you can, by running `Model.buildSchema(options)` after you build the model. The Schema is built only once, so when you run buildModel, it'll check if it's not created, and create it if that's the case, so if you create it previously, it'll use that.
+
+## Life Cycle
+
+The `BaseModel` has a pretty simple lifecycle.
+
+When you call `buildModel('Modelname')`, this steps occur:
+
+- The Schema is built (if you havent built it already)
+To customize your schema building, use `Model.buildSchema(options = { })` before invoking buildModel
+
+- Now we have the schema, so the next step uses mongoose's `schema.loadClass(this)`. This way every method is inherited on the Model.
+
+- Then the indexes are created (only if you've specified before the buildModel)
+
+- Then the `boot()` function is triggered, so if you'd like to add custom creation behaviour (like adding hooks or indexes) you can, overwritting this empty static method.
+
+- Then the model is created, using `mongoose.model(name, this._schema)` and returned for you to export.

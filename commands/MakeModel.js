@@ -45,7 +45,11 @@ class MakeMongoose extends Command {
    * @return {String}
    */
   static get signature () {
-    return 'make:mongoose {name : Name of the Mongoose Model}'
+    return `make:mongoose
+      { name? : Name of the Mongoose Model }
+      { --simple : Ignore prompts when creating the model }
+      { --raw : Creates a vanilla mongoose model }
+    `
   }
 
   /* istanbul ignore next */
@@ -69,11 +73,18 @@ class MakeMongoose extends Command {
    *
    * @return {void}
    */
-  async handle ({ name }) {
+  async handle ({ name = null }, { simple = false, raw = false }) {
+
+    if (!name) {
+      name = await this.ask('Enter model name')
+    }
+
+    const mustachePath = raw ? 'raw_model' : 'model'
+
     /**
      * Reading template as a string form the mustache file
      */
-    const template = await this.readFile(path.join(__dirname, './templates/model.mustache'), 'utf8')
+    const template = await this.readFile(path.join(__dirname, `./templates/${mustachePath}.mustache`), 'utf8')
 
     /**
      * Directory paths
@@ -89,12 +100,29 @@ class MakeMongoose extends Command {
      */
     name = name.split('/').pop()
 
+    let options = {}
+
+    if (!simple && !raw) {
+      options.timestamps = await this
+        .confirm('Include timestamps?')
+
+      options.boot = await this
+        .confirm('Include boot method?')
+
+    }
+
+    const templ_options = {
+      name,
+      exclude_timestamps: !simple ? !options.timestamps : false,
+      include_boot: !simple ? options.boot : true
+    }
+
     /**
      * If command is not executed via command line, then return
      * the response
      */
     if (!this.viaAce) {
-      return this.generateFile(validatorPath, template, { name })
+      return this.generateFile(validatorPath, template, templ_options)
     }
 
     /* istanbul ignore next */
@@ -103,7 +131,7 @@ class MakeMongoose extends Command {
      * to the end user.
      */
     try {
-      await this.generateFile(validatorPath, template, { name })
+      await this.generateFile(validatorPath, template, templ_options)
       this.completed('create', relativePath)
     } catch (error) {
       this.error(`${relativePath} validator already exists`)

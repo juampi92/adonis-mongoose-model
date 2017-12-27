@@ -1,0 +1,23 @@
+'use strict'
+
+const mongoose = use('Mongoose')
+const { Schema } = mongoose
+
+/**
+ * {{ name }}'s db Schema
+ */
+const {{ name }}Schema = new Schema({
+
+})
+
+/**
+ * {{ name }}'s instance and static methods
+ * @class
+ */
+class {{ name }} {
+
+}
+
+{{ name }}Schema.loadClass({{ name }})
+
+module.exports = mongoose.model('{{ name }}', {{ name }}Schema)
