@@ -60,6 +60,7 @@ class MongooseProvider extends ServiceProvider {
 
   _registerModel () {
     this.app.bind('Adonis/Src/Model', (app) => require('../src/Model/Base'))
+    this.app.bind('AdonisMongoose/Src/Token', (app) => require('../src/Model/TokenMongoose'))
     this.app.alias('Adonis/Src/Model', 'Model')
   }
 

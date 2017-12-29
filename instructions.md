@@ -167,88 +167,47 @@ If you are thingking that this package is mising something, create a PR! They ar
 
 # Token model
 
-This is an example of a Token Model compatible with the Mongoose Serializer
+When using auth, you'll need to define a Token Model. You do that on the `config/auth.js` file, under the `token: ''` property.
+
+You'll have to create a model `App/Models/Token` and extend the mongoose token-model it like this:
 
 ```js
 'use strict'
 
-const Model = use('Model')
-
-const { ObjectId } = use('Mongoose').Schema.Types
-
-const moment = use('moment')
+const TokenMongoose = use('AdonisMongoose/Src/Token')
 
 /**
  * Token's instance and static methods
  * @class
  */
-class Token extends Model {
-  static get timestamps () {
-    return false
+class Token extends TokenMongoose {
+  /**
+   * You can modify the amount of days that the token will be valid
+   */
+  static get expires () {
+    return 5
   }
 
   /**
-   * Define User's schema internally using Model's schema property
+   * You can modify the default schema
    */
   static get schema () {
-    return {
-      uid:          { type: ObjectId, ref: 'User' },
-      token:        { type: String, required: true },
-      type:         { type: String, required: true },
-      expires:      { type: Date, default: () => moment().add(5, 'days') }
-    }
+    // Edit your schema here
+    return super.schema
   }
 
   /**
-   *
-   *
-   * @static
-   * @param {String} token
-   * @param {String} type
-   * @memberof Token
+   * Customize populated properties for the user
    */
-  static async fetchSession (token, type) {
-    return this.findOneAndUpdate({
-      token,
-      type,
-      expires: {
-        $gte: moment()
-      }
-    }, {
-      expires: moment().add(5, 'days')
-    })
-    .populate('uid')
-  }
-
-  /**
-   * Remove sessions that match that token
-   *
-   * @static
-   * @param {any} token
-   * @returns
-   * @memberof Token
-   */
-  static async dispose (uid, tokens = null, inverse = false) {
-    // Remove some tokens
-    if (tokens) {
-      // Remove all but selected, or just selected
-      const selector = inverse ? '$nin' : '$in'
-      return this.remove({
-        uid,
-        [selector]: tokens
-      }).exec()
-    }
-    // Remove all tokens
-    return this.remove({
-      uid
-    }).exec()
+  static getUserFields (type) {
+    return '_id email'
   }
 }
 
-Token.index({ token: 1 })
-
 module.exports = Token.buildModel('Token')
 ```
+
+Check the full source of the Token Model here: [src/Model/TokenMongoose.js](src/Model/TokenMongoose.js)
 
 # Advanced Usage
 
