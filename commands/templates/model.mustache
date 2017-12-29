@@ -1,24 +1,36 @@
 'use strict'
 
-const mongoose = use('Mongoose')
-const { Schema } = mongoose
-const Model = use('Model')
+const BaseModel = use('Model')
 
 /**
- * {{ name }}'s db Schema
+ * @class {{ name }}
  */
-const {{ name }}Schema = new Schema({
+class {{ name }} extends BaseModel {
+  {{#exclude_timestamps}}
+  /**
+   * Exclude created_at and updated_at from the model
+   */
+  static get timestamps () {
+    return false
+  }
+  {{/exclude_timestamps}}
+  {{#include_boot}}
+  static boot () {
+    // Hooks:
+    // this.addHook('preSave', () => {})
+    // this.addHook('preSave', '{{ name }}Hook.method')
+    // Indexes:
+    // this.index({}, {background: true})
+  }
+  {{/include_boot}}
+  /**
+   * {{ name }}'s schema
+   */
+  static get schema () {
+    return {
 
-})
-
-/**
- * {{ name }}'s instance and static methods
- * @class
- */
-class {{ name }} extends Model {
-
+    }
+  }
 }
 
-{{ name }}Schema.loadClass({{ name }})
-
-module.exports = mongoose.model('{{ name }}', {{ name }}Schema)
+module.exports = {{ name }}.buildModel('{{ name }}')

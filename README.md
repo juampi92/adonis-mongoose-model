@@ -5,11 +5,12 @@ This package brings you a MongooseProvider that connects to the database, a Mong
 
 <img src="http://res.cloudinary.com/adonisjs/image/upload/q_100/v1497112678/adonis-purple_pzkmzt.svg" width="200px" align="right" hspace="30px" vspace="50px">
 
-## What's in the box?
+## Features
 
 1. Support for Mongoose model creation.
-2. Support for a Mongoose serializer.
-3. Adonis command for creating mongoose models
+2. Strong BaseModel that's Hook compatible, indexable and easy es6 inheritance
+3. Support for a Mongoose serializer.
+4. Adonis command for creating mongoose models
 
 ## Installation
 You can install the package from npm.

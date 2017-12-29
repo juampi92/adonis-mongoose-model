@@ -34,20 +34,25 @@ class MongooseProvider extends ServiceProvider {
         database = 'test',
         user = null,
         pass = null,
-        options = {}
+        options = {},
+        debug = false
       } = Config.get('database.mongodb.connection')
 
+      const auth = user ? `${user}:${pass}@` : ''
+
       if (!connectionString) {
-        connectionString = `mongodb://${host}:${port}/${database}`
+        connectionString = `mongodb://${auth}${host}:${port}/${database}`
       }
 
       Mongoose.Promise = global.Promise
       Mongoose.connect(connectionString, {
         useMongoClient: true,
-        user,
-        pass,
         ...options
       })
+
+      if (debug) {
+        Mongoose.set('debug', true)
+      }
 
       return Mongoose
     })
@@ -55,6 +60,7 @@ class MongooseProvider extends ServiceProvider {
 
   _registerModel () {
     this.app.bind('Adonis/Src/Model', (app) => require('../src/Model/Base'))
+    this.app.bind('AdonisMongoose/Src/Token', (app) => require('../src/Model/TokenMongoose'))
     this.app.alias('Adonis/Src/Model', 'Model')
   }
 

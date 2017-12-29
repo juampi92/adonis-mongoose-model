@@ -1,6 +1,6 @@
 {
   "name": "adonis-mongoose-model",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "Mongoose models for Adonis framework",
   "main": "index.js",
   "repository": "git@github.com:juampi92/adonis-mongoose.git",
@@ -8,5 +8,8 @@
   "license": "MIT",
   "dependencies": {
     "mongoose": "^4.13.7"
+  },
+  "peerDependencies": {
+    "@adonisjs/fold": "^4.0.5"
   }
 }

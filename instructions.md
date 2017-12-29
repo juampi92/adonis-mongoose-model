@@ -38,7 +38,8 @@ Finally add the database config inside `config/database.js` file.
       database: Env.get('MONGO_DATABASE', 'adonis'),
       options: {
         // All options can be found at http://mongoosejs.com/docs/connections.html
-      }
+      },
+      debug: false
     }
   },
 ```
@@ -75,12 +76,6 @@ Edit the `config/auth.js` file for including the serializer. For example on the 
 There's an example of a mongoose Token Model below, that will match with the serializer perfectly.
 (this needs more work)
 
-Also, when defining your User Model, you'll have to add this static property to your schema, in order for the Auth Schemas to work. (They'll access the static property 'primaryKey' of the model)
-
-```js
-UserSchema.statics.primaryKey = '_id'
-```
-
 
 ## Creating Models
 
@@ -95,106 +90,144 @@ And that will make the following
 ```js
 'use strict'
 
-const mongoose = use('Mongoose')
-const { Schema } = mongoose
-const Model = use('Model') // Basic Mongoose Model
+const BaseModel = use('Model')
 
 /**
- * Foo's db Schema
+ * @class Foo
  */
-const FooSchema = new Schema({
-  
-})
+class Foo extends BaseModel {
+  static boot () {
+    // Hooks:
+    // this.addHook('preSave', () => {})
+    // Indexes:
+    // this.index({}, {background: true})
+  }
+  /**
+   * Foo's schema
+   */
+  static get schema () {
+    return {
 
-/**
- * Foo's instance and static methods
- * @class
- */
-class Foo extends Model {
-  
+    }
+  }
 }
 
-FooSchema.loadClass(Foo)
-
-module.exports = mongoose.model('Foo', FooSchema)
+module.exports = Foo.buildModel('Foo')
 
 ```
+
+## Defining Schema
+
+You define your schema by overwriting the `static get schema ()`.
+
+## Create indexes
+
+Indexes can be created inside the `static boot ()` function (using the same syntax as mongoose's) or outside the class declaration. In that case the index will be deferred until the schema is built when running `buildModel`
+
+## Using hooks
+
+As you might know, Adonis comes with a tool called `hook`, which you can create using `adonis make:hook User`. That'll create a Hook for the User model so you can attach middleware straight to that.
+Now with mongoose-model, you can attach a middleware to a model. [Adonis hook documentation](https://adonisjs.com/docs/4.0/database-hooks) - [Mongoose middleware documentation](http://mongoosejs.com/docs/middleware.html)
+
+Inside the boot function, you can
+
+```js
+static boot () {
+  this.addHook('preSave', 'UserHook.notifyUpdate')
+}
+```
+
+Having in `App/Models/Hooks/UserHook.js`:
+
+```js
+UserHook.notifyUpdate = async (modelInstance) => {
+  // Use await if you'd like to make this async
+  NotificationCenter.push(modelInstance._id, 'save')
+}
+```
+
+The addHook functionality doesn't necesarely needs a hook. You can use a callback (the mongoose's middleware doc), and the name of the hook is composed by [pre | post] [Init | Save | Remove | Validate]. It's important that the command is written in CamelCase.
+
+## Using timestamps
+
+As default, adonis-mongoose-model comes with the created_at and updated_at property, that comes with a middleware that updates the updated_at prop each time you save.
+
+You can ignore those properties by adding a static property on your model:
+
+```js
+static get timestamps () {
+  return false
+}
+```
+
+## Extra: accessing the raw schema
+
+Inside the boot function you can do `this._schema` and access the raw mongoose schema, and add all kinds of custom functionality.
+If you are thingking that this package is mising something, create a PR! They are more than welcome.
 
 # Token model
 
-This is an example of a Token Model compatible with the Mongoose Serializer
+When using auth, you'll need to define a Token Model. You do that on the `config/auth.js` file, under the `token: ''` property.
+
+You'll have to create a model `App/Models/Token` and extend the mongoose token-model it like this:
 
 ```js
-  'use strict'
+'use strict'
 
-  const mongoose = use('Mongoose')
-  const { Schema } = mongoose
-  const Model = use('Model')
+const TokenMongoose = use('AdonisMongoose/Src/Token')
 
-  const moment = use('moment')
-
+/**
+ * Token's instance and static methods
+ * @class
+ */
+class Token extends TokenMongoose {
   /**
-   * Token's db Schema
+   * You can modify the amount of days that the token will be valid
    */
-  const TokenSchema = new Schema({
-    uid:          { type: Schema.Types.ObjectId, ref: 'User' },
-    token:        { type: String, required: true },
-    type:         { type: String, required: true },
-    expires:      { type: Date, default: () => moment().add(5, 'days') }
-  })
-
-  /**
-   * Token's instance and static methods
-   * @class
-   */
-  class Token extends Model {
-    /**
-     *
-     *
-     * @static
-     * @param {String} token
-     * @param {String} type
-     * @memberof Token
-     */
-    static async fetchSession (token, type) {
-      return this.findOneAndUpdate({
-        token,
-        type,
-        expires: {
-          $gte: moment()
-        }
-      }, {
-        expires: moment().add(5, 'days')
-      }).populate('uid', '_id name').exec()
-    }
-
-    /**
-     * Remove sessions that match that token
-     *
-     * @static
-     * @param {any} token
-     * @returns
-     * @memberof Token
-     */
-    static async dispose (uid, tokens = null, inverse = false) {
-      // Remove some tokens
-      if (tokens) {
-        // Remove all but selected, or just selected
-        const selector = inverse ? '$nin' : '$in'
-        return this.remove({
-          uid,
-          [selector]: tokens
-        }).exec()
-      }
-      // Remove all tokens
-      return this.remove({
-        uid
-      }).exec()
-    }
+  static expires () {
+    return 5
   }
 
-  TokenSchema.loadClass(Token)
-  TokenSchema.index({ token: 1 })
+  /**
+   * You can modify the default schema
+   */
+  static get schema () {
+    // Edit your schema here
+    return super.schema
+  }
 
-  module.exports = mongoose.model('Token', TokenSchema)
+  /**
+   * Customize populated properties for the user
+   */
+  static getUserFields (type) {
+    return '_id email'
+  }
+}
+
+module.exports = Token.buildModel('Token')
 ```
+
+Check the full source of the Token Model here: [src/Model/TokenMongoose.js](src/Model/TokenMongoose.js)
+
+# Advanced Usage
+
+## new Schema options
+
+If you wanna add the custom schema options when initializing, you can, by running `Model.buildSchema(options)` after you build the model. The Schema is built only once, so when you run buildModel, it'll check if it's not created, and create it if that's the case, so if you create it previously, it'll use that.
+
+## Life Cycle
+
+The `BaseModel` has a pretty simple lifecycle.
+
+When you call `buildModel('Modelname')`, this steps occur:
+
+- The Schema is built (if you havent built it already)
+To customize your schema building, use `Model.buildSchema(options = { })` before invoking buildModel
+
+- Now we have the schema, so the next step uses mongoose's `schema.loadClass(this)`. This way every method is inherited on the Model.
+
+- Then the indexes are created (only if you've specified before the buildModel)
+
+- Then the `boot()` function is triggered, so if you'd like to add custom creation behaviour (like adding hooks or indexes) you can, overwritting this empty static method.
+
+- Then the model is created, using `mongoose.model(name, this._schema)` and returned for you to export.
