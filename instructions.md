@@ -184,7 +184,7 @@ class Token extends TokenMongoose {
   /**
    * You can modify the amount of days that the token will be valid
    */
-  static get expires () {
+  static expires () {
     return 5
   }
 

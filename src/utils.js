@@ -12,7 +12,9 @@ module.exports.firstLowerCase = function (string) {
   return string.charAt(0).toLowerCase() + string.slice(1);
 }
 
-module.exports.nowAddDays = function(days, date = new Date()) {
+module.exports.nowAddDays = function(days = 0, date = null) {
+  if (!date) date = new Date()
+  console.log('adding', days, 'to', date)
   date.setDate(date.getDate() + days);
   return date;
 }

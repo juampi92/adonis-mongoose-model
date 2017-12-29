@@ -34,11 +34,10 @@ class Token extends Model {
   /**
    * Defines the amount of days
    *
-   * @readonly
    * @static
    * @returns {Numeric}
    */
-  static get expires () {
+  static expires () {
     return 5
   }
 
@@ -50,7 +49,7 @@ class Token extends Model {
       uid:          { type: ObjectId, ref: 'User' },
       token:        { type: String, required: true },
       type:         { type: String, required: true },
-      expires:      { type: Date, default: () => utils.nowAddDays(this.expires) }
+      expires:      { type: Date, default: () => utils.nowAddDays(this.expires()) }
     }
   }
 
@@ -84,7 +83,7 @@ class Token extends Model {
         $gte: new Date()
       }
     }, {
-      expires: utils.nowAddDays(this.expires)
+      expires: utils.nowAddDays(this.expires())
     })
     .populate('uid', this.getUserFields(type))
   }
