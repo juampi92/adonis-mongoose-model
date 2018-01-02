@@ -213,7 +213,8 @@ Check the full source of the Token Model here: [src/Model/TokenMongoose.js](src/
 
 ## new Schema options
 
-If you wanna add the custom schema options when initializing, you can, by running `Model.buildSchema(options)` after you build the model. The Schema is built only once, so when you run buildModel, it'll check if it's not created, and create it if that's the case, so if you create it previously, it'll use that.
+If you wanna add the custom schema options when initializing, you can override the static property `static get schemaOptions ()` and return the object with the custom options.
+Also on `static boot ()` you have access to the schema by doing `this._schema`, so you can set properties like `this._schema.set(option, value)`
 
 ## Life Cycle
 
@@ -221,8 +222,7 @@ The `BaseModel` has a pretty simple lifecycle.
 
 When you call `buildModel('Modelname')`, this steps occur:
 
-- The Schema is built (if you havent built it already)
-To customize your schema building, use `Model.buildSchema(options = { })` before invoking buildModel
+- The Schema is built (if you havent built it already), using the static property `static get schema()` and with the options from the `static get schemaOptions ()`.
 
 - Now we have the schema, so the next step uses mongoose's `schema.loadClass(this)`. This way every method is inherited on the Model.
 
