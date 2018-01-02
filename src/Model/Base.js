@@ -74,6 +74,8 @@ class BaseModel {
    * the buildModel functionality. Using this you can define your
    * schema inside your class definition.
    *
+   * Read more: http://mongoosejs.com/docs/guide.html#definition
+   *
    * @readonly
    * @static
    * @memberof BaseModel
@@ -81,6 +83,21 @@ class BaseModel {
    */
   static get schema () {
     throw new Error('You must override the static get schema() property')
+  }
+
+  /**
+   * You should replace this static property id you'd want to use
+   * custom schema options. This object is passed as a second parameter
+   * when doing new Schema(schema, options).
+   *
+   * Read more: http://mongoosejs.com/docs/guide.html#options
+   *
+   * @readonly
+   * @static
+   * @memberof BaseModel
+   */
+  static get schemaOptions () {
+    return {}
   }
 
   /**
@@ -95,19 +112,19 @@ class BaseModel {
    * @memberof BaseModel
    * @returns {Schema}
    */
-  static buildSchema (options = undefined) {
-    if (!this._schema) {
-      this._schema = new Schema(this._getRawSchema(), options)
-      this._schema.statics.primaryKey = this.primaryKey
-
-      if (this.timestamps !== false) {
-        this._schema.pre('save', (next) => {
-          this.updated_at = Date.now()
-          next()
-        })
-      }
+  static buildSchema (options = {}) {
+    if (this._schema) {
+      return this._schema
     }
-    return this._schema
+
+    options = { options, ...this.schemaOptions }
+
+    if (this.timestamps !== false) {
+      options.timestamps = { createdAt: 'created_at', updatedAt: 'updated_at' }
+    }
+
+    this._schema = new Schema(this._getRawSchema(), options)
+    this._schema.statics.primaryKey = this.primaryKey
   }
 
   /**
@@ -119,12 +136,6 @@ class BaseModel {
    */
   static _getRawSchema () {
     let schema = this.schema
-
-    if (this.timestamps !== false) {
-      schema.created_at = { type: Date, default: Date.now }
-      schema.updated_at = { type: Date, default: Date.now }
-    }
-
     return schema
   }
 

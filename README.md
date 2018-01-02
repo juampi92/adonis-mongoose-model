@@ -1,6 +1,8 @@
 # Adonis-Mongoose-Model
 > Fully Mongoose-Model integration, with mongodb connection
 
+[![NPM Version][npm-image]][npm-url]
+
 This package brings you a MongooseProvider that connects to the database, a Mongoose base Model, a mongoose serializer for AdonisAuth
 
 <img src="http://res.cloudinary.com/adonisjs/image/upload/q_100/v1497112678/adonis-purple_pzkmzt.svg" width="200px" align="right" hspace="30px" vspace="50px">
