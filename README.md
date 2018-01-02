@@ -1,7 +1,8 @@
 # Adonis-Mongoose-Model
 > Fully Mongoose-Model integration, with mongodb connection
 
-[![NPM Version][https://img.shields.io/npm/v/adonis-mongoose-model.svg?style=flat-square]][https://www.npmjs.com/package/adonis-mongoose-model]
+[![npm](https://img.shields.io/npm/v/adonis-mongoose-model.svg?style=flat-square)](https://www.npmjs.com/package/adonis-mongoose-model)
+[![npm](https://img.shields.io/npm/dm/adonis-mongoose-model.svg?style=flat-square)](https://www.npmjs.com/package/adonis-mongoose-model)
 
 This package brings you a MongooseProvider that connects to the database, a Mongoose base Model, a mongoose serializer for AdonisAuth
 
