@@ -14,7 +14,7 @@ class BaseModel {
    * @static
    * @memberof BaseModel
    */
-  static boot () {
+  static boot ({ schema }) {
 
   }
 
@@ -125,6 +125,8 @@ class BaseModel {
 
     this._schema = new Schema(this._getRawSchema(), options)
     this._schema.statics.primaryKey = this.primaryKey
+
+    return this._schema
   }
 
   /**
@@ -157,7 +159,9 @@ class BaseModel {
 
     this.__createIndexes()
 
-    this.boot()
+    this.boot({
+      schema: this._schema
+    })
 
     return mongoose.model(name, this._schema)
   }

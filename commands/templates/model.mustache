@@ -15,7 +15,7 @@ class {{ name }} extends BaseModel {
   }
   {{/exclude_timestamps}}
   {{#include_boot}}
-  static boot () {
+  static boot ({ schema }) {
     // Hooks:
     // this.addHook('preSave', () => {})
     // this.addHook('preSave', '{{ name }}Hook.method')
