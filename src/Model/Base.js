@@ -14,7 +14,7 @@ class BaseModel {
    * @static
    * @memberof BaseModel
    */
-  static boot () {
+  static boot ({ schema }) {
 
   }
 
@@ -125,6 +125,8 @@ class BaseModel {
 
     this._schema = new Schema(this._getRawSchema(), options)
     this._schema.statics.primaryKey = this.primaryKey
+
+    return this._schema
   }
 
   /**
@@ -157,7 +159,9 @@ class BaseModel {
 
     this.__createIndexes()
 
-    this.boot()
+    this.boot({
+      schema: this._schema
+    })
 
     return mongoose.model(name, this._schema)
   }
@@ -183,9 +187,10 @@ class BaseModel {
   }
 
   /**
-   * Class.primaryKey definition. You can customize it in case your model
-   * does not use _id.
+   * Class.primaryKey definition. You can customize it in case it's different in your model
    * This functionality is required for the Auth Schemas and Serializers
+   *
+   * Using id as default. ref: http://mongoosejs.com/docs/api.html#document_Document-id
    *
    * @readonly
    * @static
@@ -193,7 +198,7 @@ class BaseModel {
    * @returns {String}
    */
   static get primaryKey () {
-    return '_id'
+    return 'id'
   }
 
   /**

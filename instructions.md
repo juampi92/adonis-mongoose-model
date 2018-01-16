@@ -96,11 +96,13 @@ const BaseModel = use('Model')
  * @class Foo
  */
 class Foo extends BaseModel {
-  static boot () {
+  static boot ({ schema }) {
     // Hooks:
     // this.addHook('preSave', () => {})
     // Indexes:
     // this.index({}, {background: true})
+    // Virtuals, etc:
+    // schema.virtual('something').get(.......)
   }
   /**
    * Foo's schema
@@ -122,7 +124,7 @@ You define your schema by overwriting the `static get schema ()`.
 
 ## Create indexes
 
-Indexes can be created inside the `static boot ()` function (using the same syntax as mongoose's) or outside the class declaration. In that case the index will be deferred until the schema is built when running `buildModel`
+Indexes can be created inside the `static boot ({ schema })` function (using the same syntax as mongoose's) or outside the class declaration. In that case the index will be deferred until the schema is built when running `buildModel`
 
 ## Using hooks
 
@@ -132,8 +134,8 @@ Now with mongoose-model, you can attach a middleware to a model. [Adonis hook do
 Inside the boot function, you can
 
 ```js
-static boot () {
-  this.addHook('preSave', 'UserHook.notifyUpdate')
+static boot ({ schema }) {
+  this.addHook('preSave', 'UserHook.notifyUpdate'
 }
 ```
 
@@ -162,8 +164,9 @@ static get timestamps () {
 
 ## Extra: accessing the raw schema
 
-Inside the boot function you can do `this._schema` and access the raw mongoose schema, and add all kinds of custom functionality.
+Inside the boot function you can take advantage of the `{ schema }` passed as parameter and access the raw mongoose schema, and add all kinds of custom functionality.
 If you are thingking that this package is mising something, create a PR! They are more than welcome.
+Also, when calling `buildSchema()`, it returns the schema that you can now modify
 
 # Token model
 
@@ -231,3 +234,13 @@ When you call `buildModel('Modelname')`, this steps occur:
 - Then the `boot()` function is triggered, so if you'd like to add custom creation behaviour (like adding hooks or indexes) you can, overwritting this empty static method.
 
 - Then the model is created, using `mongoose.model(name, this._schema)` and returned for you to export.
+
+## About the primaryKey
+
+Auth Serializers and Schemes need the model to have a 'primaryKey' property, so they can have the unique identifier of the model. The primaryKey of Mongoose-Model is 'id', which corresponds with [this](http://mongoosejs.com/docs/api.html#document_Document-id). If you'd like to change it, overwrite the property on your model.
+
+```js
+static get primaryKey () {
+  return 'id'
+}
+```
