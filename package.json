@@ -1,6 +1,6 @@
 {
   "name": "adonis-mongoose-model",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Mongoose models for Adonis framework",
   "main": "index.js",
   "repository": "git@github.com:juampi92/adonis-mongoose.git",
