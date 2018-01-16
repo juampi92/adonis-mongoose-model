@@ -126,11 +126,6 @@ class BaseModel {
     this._schema = new Schema(this._getRawSchema(), options)
     this._schema.statics.primaryKey = this.primaryKey
 
-    // Add '__id' field (string instead of ObjectID)
-    this._schema.virtual('__id').get(function () {
-      return String(this._id)
-    })
-
     return this._schema
   }
 
@@ -192,9 +187,10 @@ class BaseModel {
   }
 
   /**
-   * Class.primaryKey definition. You can customize it in case your model
-   * does not use _id.
+   * Class.primaryKey definition. You can customize it in case it's different in your model
    * This functionality is required for the Auth Schemas and Serializers
+   *
+   * Using id as default. ref: http://mongoosejs.com/docs/api.html#document_Document-id
    *
    * @readonly
    * @static
@@ -202,7 +198,7 @@ class BaseModel {
    * @returns {String}
    */
   static get primaryKey () {
-    return '_id'
+    return 'id'
   }
 
   /**

@@ -235,6 +235,12 @@ When you call `buildModel('Modelname')`, this steps occur:
 
 - Then the model is created, using `mongoose.model(name, this._schema)` and returned for you to export.
 
-## About the __id value
+## About the primaryKey
 
-There's an alternative for ObjectID id value, and it's `__id` (double _ prefix). This is because in some dependencies you might use a String for compareing ObjectIDs, or for validating types, so basically `__id` casts `_id` to a String and returns it.
+Auth Serializers and Schemes need the model to have a 'primaryKey' property, so they can have the unique identifier of the model. The primaryKey of Mongoose-Model is 'id', which corresponds with [this](http://mongoosejs.com/docs/api.html#document_Document-id). If you'd like to change it, overwrite the property on your model.
+
+```js
+static get primaryKey () {
+  return 'id'
+}
+```

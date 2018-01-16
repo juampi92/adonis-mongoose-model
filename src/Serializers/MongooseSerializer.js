@@ -53,9 +53,6 @@ class MongooseSerializer {
    * @return {String}
    */
   get primaryKey () {
-    if (this._Model.primaryKey === '_id') {
-      return '__id'
-    }
     return this._Model.primaryKey
   }
 
