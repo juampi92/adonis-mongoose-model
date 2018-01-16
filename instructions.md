@@ -234,3 +234,7 @@ When you call `buildModel('Modelname')`, this steps occur:
 - Then the `boot()` function is triggered, so if you'd like to add custom creation behaviour (like adding hooks or indexes) you can, overwritting this empty static method.
 
 - Then the model is created, using `mongoose.model(name, this._schema)` and returned for you to export.
+
+## About the __id value
+
+There's an alternative for ObjectID id value, and it's `__id` (double _ prefix). This is because in some dependencies you might use a String for compareing ObjectIDs, or for validating types, so basically `__id` casts `_id` to a String and returns it.

@@ -53,6 +53,9 @@ class MongooseSerializer {
    * @return {String}
    */
   get primaryKey () {
+    if (this._Model.primaryKey === '_id') {
+      return '__id'
+    }
     return this._Model.primaryKey
   }
 
@@ -83,7 +86,9 @@ class MongooseSerializer {
    */
   async findById (id) {
     debug('finding user with primary key as %s', id)
-    return this._Model.findById(id).exec()
+    return this._Model
+      .findById(id)
+      .exec()
   }
 
   /**
@@ -96,9 +101,10 @@ class MongooseSerializer {
    * @return {Model|Null} The model instance or `null`
    */
   async findByUid (uid) {
-    return this._Model.findOne({
-      [this._config.uid || this.primaryKey]: uid
-    })
+    return this._Model
+      .findOne({
+        [this._config.uid || this.primaryKey]: uid
+      })
   }
 
   /**

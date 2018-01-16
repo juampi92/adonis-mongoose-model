@@ -126,6 +126,11 @@ class BaseModel {
     this._schema = new Schema(this._getRawSchema(), options)
     this._schema.statics.primaryKey = this.primaryKey
 
+    // Add '__id' field (string instead of ObjectID)
+    this._schema.virtual('__id').get(function () {
+      return String(this._id)
+    })
+
     return this._schema
   }
 
