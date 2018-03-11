@@ -9,11 +9,10 @@
  * file that was distributed with this source code.
 */
 
-const { ioc, ServiceProvider }  = require('@adonisjs/fold')
+const { ioc, ServiceProvider } = require('@adonisjs/fold')
 const Mongoose = require('mongoose')
 
 class MongooseProvider extends ServiceProvider {
-
   /**
    * Install mongoose serializer
    */
@@ -56,9 +55,9 @@ class MongooseProvider extends ServiceProvider {
   }
 
   _registerModel () {
-    this.app.bind('Adonis/Src/Model', (app) => require('../src/Model/Base'))
+    this.app.bind('Adonis/Src/MongooseModel', (app) => require('../src/Model/Base'))
     this.app.bind('AdonisMongoose/Src/Token', (app) => require('../src/Model/TokenMongoose'))
-    this.app.alias('Adonis/Src/Model', 'Model')
+    this.app.alias('Adonis/Src/MongooseModel', 'MongooseModel')
   }
 
     /**
@@ -102,7 +101,6 @@ class MongooseProvider extends ServiceProvider {
     const ace = require('@adonisjs/ace')
     ace.addCommand('Adonis/Commands/Make:Mongoose')
   }
-
 }
 
 module.exports = MongooseProvider

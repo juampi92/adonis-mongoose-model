@@ -1,3 +1,4 @@
+/* global use */
 'use strict'
 
 const Model = require('./Base')
@@ -46,10 +47,10 @@ class Token extends Model {
    */
   static get schema () {
     return {
-      uid:          { type: ObjectId, ref: 'User' },
-      token:        { type: String, required: true },
-      type:         { type: String, required: true },
-      expires:      { type: Date, default: () => utils.nowAddDays(this.expires()) }
+      uid: { type: ObjectId, ref: 'User' },
+      token: { type: String, required: true },
+      type: { type: String, required: true },
+      expires: { type: Date, default: () => utils.nowAddDays(this.expires()) }
     }
   }
 

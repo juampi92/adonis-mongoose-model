@@ -1,6 +1,7 @@
+/* global use */
 'use strict'
 
-const { ioc }  = require('@adonisjs/fold')
+require('@adonisjs/fold')
 
 const mongoose = use('Mongoose')
 const { Schema } = mongoose
@@ -55,11 +56,11 @@ class BaseModel {
    * @returns {Closure} callback
    * @memberof BaseModel
    */
-  static __importHook(name) {
+  static __importHook (name) {
     const [className, methodName] = name.split('.')
     const hookClass = use('App/Models/Hooks/' + className)
 
-    return async function(next) {
+    return async function (next) {
       try {
         await hookClass[methodName](this)
       } catch (err) {
@@ -170,9 +171,10 @@ class BaseModel {
     // If the schema is yet not created
     if (!this._schema) {
       // Store indexes in temp array until the schema is created
-      if (!this.__indexes) this.__indexes = [];
+      if (!this.__indexes) {
+        this.__indexes = []
+      }
       this.__indexes.push(args)
-      return
     } else {
       // Create the indexes right away
       this._schema.index(...args)
