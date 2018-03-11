@@ -33,8 +33,7 @@ class BaseModel {
    * @memberof BaseModel
    */
   static addHook (event, callback) {
-    const [instruction, ...commands] = utils.splitOnCaps(event)
-    const command = utils.firstLowerCase(commands.join(''))
+    const { instruction, command } = utils.formatToMongooseMiddleware(event)
 
     // Resolve callback if is hook
     if (utils.isString(callback)) {
