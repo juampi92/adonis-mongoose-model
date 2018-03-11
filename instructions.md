@@ -90,7 +90,7 @@ And that will make the following
 ```js
 'use strict'
 
-const BaseModel = use('Model')
+const BaseModel = use('MongooseModel')
 
 /**
  * @class Foo
@@ -135,7 +135,7 @@ Inside the boot function, you can
 
 ```js
 static boot ({ schema }) {
-  this.addHook('preSave', 'UserHook.notifyUpdate'
+  this.addHook('preSave', 'UserHook.notifyUpdate')
 }
 ```
 
