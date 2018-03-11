@@ -45,10 +45,7 @@ class MongooseProvider extends ServiceProvider {
       }
 
       Mongoose.Promise = global.Promise
-      Mongoose.connect(connectionString, {
-        useMongoClient: true,
-        ...options
-      })
+      Mongoose.connect(connectionString, options)
 
       if (debug) {
         Mongoose.set('debug', true)
