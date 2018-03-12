@@ -60,7 +60,7 @@ class MongooseProvider extends ServiceProvider {
     this.app.alias('Adonis/Src/MongooseModel', 'MongooseModel')
   }
 
-    /**
+  /**
    * Register the `make:Mongoose` command to the IoC container
    *
    * @method _registerCommands
