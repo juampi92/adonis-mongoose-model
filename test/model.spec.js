@@ -106,13 +106,15 @@ test.group('Model', function () {
     assert.doesNotHaveAnyKeys(NewModelTimeless._schema.options, ['timestamps'])
   })
 
-  test('should create hooks', function (assert) {
+  test('should create hooks', function (assert, done) {
     assert.plan(1)
 
     class NewModel extends Model {
       static boot ({ schema }) {
-        this.addHook('preValidate', (instance) => {
-          assert.equal(instance.num, 4)
+        this.addHook('preValidate', function (next) {
+          assert.equal(this.num, 5)
+          next()
+          done()
         })
       }
 
@@ -123,7 +125,7 @@ test.group('Model', function () {
 
     const M5 = NewModel.buildModel('M5')
 
-    const m = new M5({ num: 4 })
+    const m = new M5({ name: 'asd', num: 5 })
     m.validate()
   })
 
@@ -153,7 +155,7 @@ test.group('Model', function () {
 
     const M6 = NewModel.buildModel('M6')
 
-    const m = new M6({ num: 1 })
+    const m = new M6({ name: 'asd', num: 1 })
     m.validate()
   })
 })

@@ -33,7 +33,8 @@
     "japa-cli": "^1.0.1",
     "nyc": "^11.4.1",
     "semver": "^5.5.0",
-    "standard": "^11.0.0"
+    "standard": "^11.0.0",
+    "@adonisjs/fold": "^4.0.5"
   },
   "bugs": {
     "url": "https://github.com/juampi92/adonis-mongoose-model/issues"
