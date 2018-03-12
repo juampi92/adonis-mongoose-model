@@ -8,6 +8,8 @@ const BaseModel = require('../src/Model/Base')
 
 test.group('IoC', function () {
   // Setup
+  ioc.fake('Mongoose', () => require('mongoose'))
+
   const prov = new ServiceProvider(ioc)
   prov._registerModel()
 

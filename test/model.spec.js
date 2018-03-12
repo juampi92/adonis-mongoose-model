@@ -5,6 +5,8 @@ const Model = require('../src/Model/Base')
 const { ioc } = require('@adonisjs/fold')
 
 test.group('Model', function () {
+  ioc.fake('Mongoose', () => require('mongoose'))
+
   test('should throw error if schema is not defined', function (assert) {
     assert.throws(() => {
       Model.buildSchema()
