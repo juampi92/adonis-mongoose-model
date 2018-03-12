@@ -1,11 +1,13 @@
 'use strict'
 
 const test = require('japa')
-const Model = require('../src/Model/Base')
 const { ioc } = require('@adonisjs/fold')
 
 test.group('Model', function () {
   ioc.fake('Mongoose', () => require('mongoose'))
+  ioc.fake('MongooseModel', () => require('../src/Model/Base'))
+
+  const Model = use('MongooseModel')
 
   test('should throw error if schema is not defined', function (assert) {
     assert.throws(() => {
