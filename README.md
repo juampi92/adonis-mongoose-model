@@ -3,6 +3,7 @@
 
 [![npm](https://img.shields.io/npm/v/adonis-mongoose-model.svg?style=flat-square)](https://www.npmjs.com/package/adonis-mongoose-model)
 [![StyleCI](https://styleci.io/repos/114804179/shield?branch=dev)](https://styleci.io/repos/114804179)
+[![Build Status](https://travis-ci.org/juampi92/adonis-mongoose-model.svg?branch=master&style=flat-square)](https://travis-ci.org/juampi92/adonis-mongoose-model)
 [![npm](https://img.shields.io/npm/dm/adonis-mongoose-model.svg?style=flat-square)](https://www.npmjs.com/package/adonis-mongoose-model)
 
 This package brings you a MongooseProvider that connects to the database, a Mongoose base Model, a mongoose serializer for AdonisAuth
