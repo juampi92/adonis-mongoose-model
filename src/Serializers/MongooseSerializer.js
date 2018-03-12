@@ -212,7 +212,7 @@ class MongooseSerializer {
    * @return {Object}
    */
   async listTokens (user, type) {
-    return await this._Token.find({
+    return this._Token.find({
       uid: user.primaryKeyValue(), type
     }).exec()
   }

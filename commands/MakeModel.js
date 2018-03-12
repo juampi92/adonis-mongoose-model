@@ -74,7 +74,6 @@ class MakeMongoose extends Command {
    * @return {void}
    */
   async handle ({ name = null }, { simple = false, raw = false }) {
-
     if (!name) {
       name = await this.ask('Enter model name')
     }
@@ -108,10 +107,9 @@ class MakeMongoose extends Command {
 
       options.boot = await this
         .confirm('Include boot method?')
-
     }
 
-    const templ_options = {
+    const templOptions = {
       name,
       exclude_timestamps: !simple ? !options.timestamps : false,
       include_boot: !simple ? options.boot : true
@@ -122,7 +120,7 @@ class MakeMongoose extends Command {
      * the response
      */
     if (!this.viaAce) {
-      return this.generateFile(validatorPath, template, templ_options)
+      return this.generateFile(validatorPath, template, templOptions)
     }
 
     /* istanbul ignore next */
@@ -131,7 +129,7 @@ class MakeMongoose extends Command {
      * to the end user.
      */
     try {
-      await this.generateFile(validatorPath, template, templ_options)
+      await this.generateFile(validatorPath, template, templOptions)
       this.completed('create', relativePath)
     } catch (error) {
       this.error(`${relativePath} validator already exists`)

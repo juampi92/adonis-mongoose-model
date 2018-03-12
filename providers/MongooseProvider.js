@@ -9,11 +9,10 @@
  * file that was distributed with this source code.
 */
 
-const { ioc, ServiceProvider }  = require('@adonisjs/fold')
+const { ioc, ServiceProvider } = require('@adonisjs/fold')
 const Mongoose = require('mongoose')
 
 class MongooseProvider extends ServiceProvider {
-
   /**
    * Install mongoose serializer
    */
@@ -45,10 +44,7 @@ class MongooseProvider extends ServiceProvider {
       }
 
       Mongoose.Promise = global.Promise
-      Mongoose.connect(connectionString, {
-        useMongoClient: true,
-        ...options
-      })
+      Mongoose.connect(connectionString, options)
 
       if (debug) {
         Mongoose.set('debug', true)
@@ -56,15 +52,16 @@ class MongooseProvider extends ServiceProvider {
 
       return Mongoose
     })
+    this.app.alias('Adonis/Addons/Mongoose', 'Mongoose')
   }
 
   _registerModel () {
-    this.app.bind('Adonis/Src/Model', (app) => require('../src/Model/Base'))
+    this.app.bind('Adonis/Src/MongooseModel', (app) => require('../src/Model/Base'))
     this.app.bind('AdonisMongoose/Src/Token', (app) => require('../src/Model/TokenMongoose'))
-    this.app.alias('Adonis/Src/Model', 'Model')
+    this.app.alias('Adonis/Src/MongooseModel', 'MongooseModel')
   }
 
-    /**
+  /**
    * Register the `make:Mongoose` command to the IoC container
    *
    * @method _registerCommands
@@ -105,7 +102,6 @@ class MongooseProvider extends ServiceProvider {
     const ace = require('@adonisjs/ace')
     ace.addCommand('Adonis/Commands/Make:Mongoose')
   }
-
 }
 
 module.exports = MongooseProvider

@@ -1,8 +1,9 @@
+/* global use */
 'use strict'
 
 const Model = require('./Base')
 
-const { ObjectId } = use('Mongoose').Schema.Types
+const { ObjectId } = use('mongoose').Schema.Types
 
 const utils = require('../utils')
 
@@ -46,10 +47,10 @@ class Token extends Model {
    */
   static get schema () {
     return {
-      uid:          { type: ObjectId, ref: 'User' },
-      token:        { type: String, required: true },
-      type:         { type: String, required: true },
-      expires:      { type: Date, default: () => utils.nowAddDays(this.expires()) }
+      uid: { type: ObjectId, ref: 'User' },
+      token: { type: String, required: true },
+      type: { type: String, required: true },
+      expires: { type: Date, default: () => utils.nowAddDays(this.expires()) }
     }
   }
 
@@ -76,16 +77,17 @@ class Token extends Model {
    * @returns {Object} returns the token object with the populated user
    */
   static async fetchSession (token, type) {
-    return this.findOneAndUpdate({
-      token,
-      type,
-      expires: {
-        $gte: new Date()
-      }
-    }, {
-      expires: utils.nowAddDays(this.expires())
-    })
-    .populate('uid', this.getUserFields(type))
+    return this
+      .findOneAndUpdate({
+        token,
+        type,
+        expires: {
+          $gte: new Date()
+        }
+      }, {
+        expires: utils.nowAddDays(this.expires())
+      })
+      .populate('uid', this.getUserFields(type))
   }
 
   /**
