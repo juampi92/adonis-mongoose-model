@@ -3,7 +3,7 @@
 
 require('@adonisjs/fold')
 
-const mongoose = use('Mongoose')
+const mongoose = use('mongoose')
 const { Schema } = mongoose
 
 const utils = require('../utils')

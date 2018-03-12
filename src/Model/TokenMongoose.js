@@ -3,7 +3,7 @@
 
 const Model = require('./Base')
 
-const { ObjectId } = use('Mongoose').Schema.Types
+const { ObjectId } = use('mongoose').Schema.Types
 
 const utils = require('../utils')
 

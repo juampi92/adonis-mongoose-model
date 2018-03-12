@@ -2,6 +2,5 @@
 
 const test = require('japa')
 
-test.group('', function () {
-
+test.skip('Mongoose connections', function () {
 })

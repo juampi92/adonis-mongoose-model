@@ -52,6 +52,7 @@ class MongooseProvider extends ServiceProvider {
 
       return Mongoose
     })
+    this.app.alias('Adonis/Addons/Mongoose', 'Mongoose')
   }
 
   _registerModel () {
