@@ -6,7 +6,8 @@ const ServiceProvider = require('../providers/MongooseProvider')
 
 test.group('IoC', function () {
   // Setup
-  ioc.fake('Mongoose', () => require('mongoose'))
+  ioc.fake('Adonis/Addons/Mongoose', () => require('mongoose'))
+  ioc.fake('Mongoose', () => ioc.use('Adonis/Addons/Mongoose'))
 
   const BaseModel = require('../src/Model/Base')
 
