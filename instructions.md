@@ -8,13 +8,6 @@ const providers = [
 ]
 ```
 
-And create an Alias for Mongoose
-
-```js
-const aliases = {
-  Mongoose: 'Adonis/Addons/Mongoose'
-}
-```
 ## Config mongodb connection
 
 Finally add the database config inside `config/database.js` file.

@@ -23,7 +23,7 @@ class MongooseProvider extends ServiceProvider {
       'serializer')
   }
 
-  async _registerMongoose () {
+  _registerMongoose () {
     this.app.singleton('Adonis/Addons/Mongoose', function (app) {
       const Config = app.use('Adonis/Src/Config')
       let connectionString = Config.get('database.mongodb.connectionString', null)
@@ -85,7 +85,7 @@ class MongooseProvider extends ServiceProvider {
     this._registerSerializer()
     this._registerModel()
     this._registerCommands()
-    await this._registerMongoose()
+    this._registerMongoose()
   }
 
   /**
