@@ -17,7 +17,7 @@ class Token extends Model {
    *
    * @static
    */
-  static boot () {
+  static boot() {
     // Create a token index
     this.index({ token: 1 })
   }
@@ -28,7 +28,7 @@ class Token extends Model {
    * @readonly
    * @static
    */
-  static get timestamps () {
+  static get timestamps() {
     return false
   }
 
@@ -38,14 +38,14 @@ class Token extends Model {
    * @static
    * @returns {Numeric}
    */
-  static expires () {
+  static expires() {
     return 5
   }
 
   /**
    * Define User's schema internally using Model's schema property
    */
-  static get schema () {
+  static get schema() {
     return {
       uid: { type: ObjectId, ref: 'User' },
       token: { type: String, required: true },
@@ -64,7 +64,7 @@ class Token extends Model {
    * @param {String} type
    * @returns {String}
    */
-  static getUserFields (type) {
+  static getUserFields(type) {
     return null
   }
 
@@ -76,7 +76,7 @@ class Token extends Model {
    * @param {String} type
    * @returns {Object} returns the token object with the populated user
    */
-  static async fetchSession (token, type) {
+  static async fetchSession(token, type) {
     return this
       .findOneAndUpdate({
         token,
@@ -85,8 +85,8 @@ class Token extends Model {
           $gte: new Date()
         }
       }, {
-        expires: utils.nowAddDays(this.expires())
-      })
+          expires: utils.nowAddDays(this.expires())
+        })
       .populate('uid', this.getUserFields(type))
   }
 
@@ -97,15 +97,15 @@ class Token extends Model {
    * @param {any} token
    * @returns
    */
-  static async dispose (uid, tokens = null, inverse = false) {
+  static async dispose(uid, tokens = null, inverse = false) {
     // Remove some tokens
     if (tokens) {
       // Remove all but selected, or just selected
-      const selector = inverse ? '$nin' : '$in'
-      return this.remove({
-        uid,
-        [selector]: tokens
-      }).exec()
+      const selector = inverse ? '$nin' : '$in';
+      let query = {
+        token: { [selector]: tokens }
+      };
+      return this.remove(query).exec()
     }
     // Remove all tokens
     return this.remove({
