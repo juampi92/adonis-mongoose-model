@@ -120,7 +120,7 @@ class BaseModel {
     options = { options, ...this.schemaOptions }
 
     if (this.timestamps !== false) {
-      options.timestamps = { createdAt: 'created_at', updatedAt: 'updated_at' }
+      options.timestamps = { createdAt: 'createdAt', updatedAt: 'updatedAt' }
     }
 
     this._schema = new Schema(this._getRawSchema(), options)
