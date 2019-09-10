@@ -44,6 +44,7 @@ class MongooseProvider extends ServiceProvider {
       }
 
       Mongoose.Promise = global.Promise
+      Mongoose.set('useCreateIndex', true);
       Mongoose.connect(connectionString, options)
 
       if (debug) {
