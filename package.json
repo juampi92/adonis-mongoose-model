@@ -16,7 +16,7 @@
     "mongoose": "^5.7.0"
   },
   "peerDependencies": {
-    "@adonisjs/fold": "^4.0.5"
+    "@adonisjs/fold": "^4.0.9"
   },
   "scripts": {
     "lint": "standard",
@@ -25,7 +25,7 @@
     "test": "node japaFile.js"
   },
   "devDependencies": {
-    "@adonisjs/fold": "^4.0.5",
+    "@adonisjs/fold": "^4.0.9",
     "japa": "^3.0.1",
     "semver": "^6.3.0",
     "standard": "^14.3.1"
