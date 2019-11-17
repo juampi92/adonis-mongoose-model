@@ -20,21 +20,15 @@
   },
   "scripts": {
     "lint": "standard",
+    "fix": "standard --fix",
     "pretest": "npm run lint",
-    "posttest": "npm run coverage",
-    "test:local": "FORCE_COLOR=true node bin/index.js --local",
-    "test": "nyc npm run test:local",
-    "test:win": "set FORCE_COLOR=true && node bin/index.js --win",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "test": "node japaFile.js"
   },
   "devDependencies": {
-    "coveralls": "^3.0.0",
-    "japa": "^1.0.6",
-    "japa-cli": "^1.0.1",
-    "nyc": "^11.4.1",
-    "semver": "^5.5.0",
-    "standard": "^11.0.0",
-    "@adonisjs/fold": "^4.0.5"
+    "@adonisjs/fold": "^4.0.5",
+    "japa": "^3.0.1",
+    "semver": "^6.3.0",
+    "standard": "^14.3.1"
   },
   "bugs": {
     "url": "https://github.com/juampi92/adonis-mongoose-model/issues"
