@@ -1,6 +1,6 @@
 'use strict'
 
-let utils = module.exports = {}
+const utils = module.exports = {}
 
 utils.isString = function (x) {
   return Object.prototype.toString.call(x) === '[object String]'
@@ -35,11 +35,11 @@ utils.isValidCommand = function (command) {
 }
 
 const LUCID_INSTRUCTIONS_TO_MONGOOSE = {
-  'before': 'pre',
-  'after': 'post'
+  before: 'pre',
+  after: 'post'
 }
 const LUCID_COMMANDS_TO_MONGOOSE = {
-  'delete': 'remove'
+  delete: 'remove'
 }
 
 /**
@@ -53,11 +53,11 @@ utils.deconstructEvent = function (event) {
   let [instruction, ...commands] = utils.splitOnCaps(event)
   let command = utils.firstLowerCase(commands.join(''))
 
-  if (LUCID_INSTRUCTIONS_TO_MONGOOSE.hasOwnProperty(instruction)) {
+  if (Object.prototype.hasOwnProperty.call(LUCID_INSTRUCTIONS_TO_MONGOOSE, instruction)) {
     instruction = LUCID_INSTRUCTIONS_TO_MONGOOSE[instruction]
   }
 
-  if (LUCID_COMMANDS_TO_MONGOOSE.hasOwnProperty(command)) {
+  if (Object.prototype.hasOwnProperty.call(LUCID_COMMANDS_TO_MONGOOSE, command)) {
     command = LUCID_COMMANDS_TO_MONGOOSE[command]
   }
 

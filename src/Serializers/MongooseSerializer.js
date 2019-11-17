@@ -158,7 +158,7 @@ class MongooseSerializer {
    * @return {void}
    */
   async saveToken (user, token, type) {
-    let accessToken = new this._Token({
+    const accessToken = new this._Token({
       token, uid: user._id, type
     })
     debug('saving token for %s user', user._id)

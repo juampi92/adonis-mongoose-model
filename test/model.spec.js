@@ -85,6 +85,7 @@ test.group('Model', function () {
       static get timestamps () {
         return false
       }
+
       static get schema () {
         return {
           name: String,

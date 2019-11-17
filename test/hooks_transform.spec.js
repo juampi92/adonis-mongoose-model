@@ -6,9 +6,9 @@ const utils = require('../src/utils')
 test.group('Hooks', function () {
   test('should separate correctly to mongoose', function (assert) {
     const events = {
-      'preSave': { instruction: 'pre', command: 'save' },
-      'postSave': { instruction: 'post', command: 'save' },
-      'preFind': { instruction: 'pre', command: 'find' }
+      preSave: { instruction: 'pre', command: 'save' },
+      postSave: { instruction: 'post', command: 'save' },
+      preFind: { instruction: 'pre', command: 'find' }
     }
 
     Object.keys(events).forEach(key => {
@@ -26,9 +26,9 @@ test.group('Hooks', function () {
 
   test('should transform from lucid hook', function (assert) {
     const events = {
-      'beforeSave': { instruction: 'pre', command: 'save' },
-      'afterSave': { instruction: 'post', command: 'save' },
-      'preDelete': { instruction: 'pre', command: 'remove' }
+      beforeSave: { instruction: 'pre', command: 'save' },
+      afterSave: { instruction: 'post', command: 'save' },
+      preDelete: { instruction: 'pre', command: 'remove' }
     }
 
     Object.keys(events).forEach(key => {

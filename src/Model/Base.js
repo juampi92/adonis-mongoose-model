@@ -137,7 +137,7 @@ class BaseModel {
    * @memberof BaseModel
    */
   static _getRawSchema () {
-    let schema = this.schema
+    const schema = this.schema
     return schema
   }
 
