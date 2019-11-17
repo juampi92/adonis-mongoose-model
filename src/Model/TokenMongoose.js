@@ -106,7 +106,7 @@ class Token extends Model {
       const selector = inverse ? '$nin' : '$in'
       return this.remove({
         uid,
-        token: { [selector]: tokens },
+        token: { [selector]: tokens }
       }).exec()
     }
     // Remove all tokens
