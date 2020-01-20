@@ -101,7 +101,7 @@ class MongooseSerializer {
     return this._Model
       .findOne({
         [this._config.uid || this.primaryKey]: uid
-      })
+      }).select('+password')
   }
 
   /**
