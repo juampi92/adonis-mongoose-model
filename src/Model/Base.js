@@ -5,7 +5,6 @@ require('@adonisjs/fold')
 
 const mongoose = use('Adonis/Addons/Mongoose')
 const { Schema } = mongoose
-
 const utils = require('../utils')
 
 class BaseModel {
@@ -16,7 +15,6 @@ class BaseModel {
    * @memberof BaseModel
    */
   static boot ({ schema }) {
-
   }
 
   /**
@@ -44,6 +42,30 @@ class BaseModel {
     this._schema[instruction](command, callback)
 
     return this
+  }
+
+  /**
+   * Adds a new trait to the model. Ideally it does a very
+   * simple thing and that is to pass the model class to
+   * your trait and you own it from there.
+   *
+   * @method addTrait
+   *
+   * @param  {Function|String} trait - A plain function or reference to IoC container string
+   */
+  static addTrait (trait, options = {}) {
+    if (typeof (trait) !== 'function' && typeof (trait) !== 'string') {
+      throw GE
+        .InvalidArgumentException
+        .invalidParameter('Model.addTrait expects an IoC container binding or a closure', trait)
+    }
+
+    /**
+     * If trait is a string, then point to register function
+     */
+    trait = typeof (trait) === 'string' ? `${trait}.register` : trait
+    const { method } = iocResolver.forDir('modelTraits').resolveFunc(trait)
+    method(this, options)
   }
 
   /**
@@ -155,13 +177,13 @@ class BaseModel {
 
     this.buildSchema()
 
-    this._schema.loadClass(this)
-
     this.__createIndexes()
 
     this.boot({
       schema: this._schema
     })
+
+    this._schema.loadClass(this)
 
     return mongoose.model(name, this._schema)
   }

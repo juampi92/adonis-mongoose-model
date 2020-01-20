@@ -143,6 +143,32 @@ UserHook.notifyUpdate = async (modelInstance) => {
 
 The addHook functionality doesn't necesarely needs a hook. You can use a callback (the mongoose's middleware doc), and the name of the hook is composed by [pre | post] [Init | Save | Remove | Validate]. It's important that the command is written in CamelCase.
 
+## Using traits
+
+Traits work exactly the same way they do in Adonisjs, please refer to the official [Adonis traits documentation](https://adonisjs.com/docs/4.1/traits). Traits are initialized in the boot method:
+
+```
+  static boot ({ schema }) {
+    this.addTrait('App/Models/Traits/HasMedia', { // trait options })
+  }
+```
+
+It's worth noting that everty trait has access to the schema property on the model, accessible through the `Model._schema()` property. This enabled us to alter the schema from the trait.
+
+```
+class HasMedia {
+  register (Model, customOptions = {}) {
+    const defaultOptions = {}
+    const options = Object.assign(defaultOptions, customOptions)
+    
+     // add a new field to the schema
+    Model._schema.add({ my_media: String })
+      
+    Model.prototype.testFunction = async function(){
+      console.log("this function will be available from the model")
+    }
+```
+
 ## Using timestamps
 
 As default, adonis-mongoose-model comes with the created_at and updated_at property, that comes with a middleware that updates the updated_at prop each time you save.
