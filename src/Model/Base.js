@@ -164,6 +164,38 @@ class BaseModel {
   }
 
   /**
+   * Set attributes on model instance in bulk.
+   *
+   * NOTE: Calling this method will remove the existing attributes.
+   *
+   * @method fill
+   *
+   * @param  {Object} attributes
+   *
+   * @return {void}
+   */
+  fill (attributes) {
+    this.$attributes = {}
+    this.merge(attributes)
+  }
+
+  /**
+   * Merge attributes into on a model instance without
+   * overriding existing attributes and their values
+   *
+   * @method fill
+   *
+   * @param  {Object} attributes
+   *
+   * @return {void}
+   */
+  merge (attributes) {
+    for (let key of Object.keys(attributes)) {
+      this.set(key, attributes[key])
+    }
+  }
+
+  /**
    * Returns a created mongoose model, named like the name parameter.
    * It takes the
    *
