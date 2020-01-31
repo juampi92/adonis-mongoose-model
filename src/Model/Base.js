@@ -1,11 +1,12 @@
 /* global use */
 'use strict'
 
-require('@adonisjs/fold')
+const fold = require('@adonisjs/fold')
 
 const mongoose = use('Adonis/Addons/Mongoose')
 const { Schema } = mongoose
 const utils = require('../utils')
+const GE = require('@adonisjs/generic-exceptions')
 
 class BaseModel {
   /**
@@ -64,7 +65,8 @@ class BaseModel {
      * If trait is a string, then point to register function
      */
     trait = typeof (trait) === 'string' ? `${trait}.register` : trait
-    const { method } = iocResolver.forDir('modelTraits').resolveFunc(trait)
+    // eslint-disable-line
+    const { method } = fold.resolver.forDir('modelTraits').resolveFunc(trait)
     method(this, options)
   }
 
@@ -190,7 +192,7 @@ class BaseModel {
    * @return {void}
    */
   merge (attributes) {
-    for (let key of Object.keys(attributes)) {
+    for (const key of Object.keys(attributes)) {
       this.set(key, attributes[key])
     }
   }
